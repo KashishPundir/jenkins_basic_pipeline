@@ -4,6 +4,13 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code from GitHub...'
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
                 echo 'Building the application...'
@@ -13,19 +20,11 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing dependencies...'
-
-                sh 'python -m pip install -r requirements.txt'
-            }
-        }
-
         stage('Test') {
             steps {
-                echo 'Running automated tests...'
+                echo 'Running tests...'
 
-                sh 'python -m pytest -v'
+                sh 'pytest'
             }
         }
     }
