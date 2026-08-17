@@ -8,8 +8,8 @@ pipeline {
             steps {
                 echo 'Building the application...'
 
-                sh 'python3 --version'
-                sh 'python3 app.py'
+                sh 'python --version'
+                sh 'python app.py'
             }
         }
 
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies...'
 
-                sh 'python3 -m pip install --user -r requirements.txt'
+                sh 'python -m pip install --user -r requirements.txt'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo 'Running automated tests...'
 
-                sh 'python3 -m pytest -v'
+                sh 'python -m pytest -v'
             }
         }
     }
