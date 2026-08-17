@@ -4,6 +4,29 @@ pipeline {
 
     stages {
 
+        stage('Create Virtual Environment') {
+            steps {
+                echo 'Creating Python virtual environment...'
+
+                sh '''
+                    python3 -m venv .venv
+                    .venv/bin/python --version
+                    .venv/bin/pip --version
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing Python dependencies...'
+
+                sh '''
+                    .venv/bin/pip install --upgrade pip
+                    .venv/bin/pip install -r requirements.txt
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 echo '========== BUILD STAGE =========='
@@ -48,6 +71,10 @@ pipeline {
 
         failure {
             echo 'Pipeline failed!'
+        }
+
+        always {
+            echo 'Pipeline execution completed.'
         }
     }
 }
