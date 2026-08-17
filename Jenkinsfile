@@ -4,34 +4,40 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo 'Building the application...'
+                checkout scm
+            }
+        }
 
-                sh 'python --version'
-                sh 'python app.py'
+        stage('Check Python') {
+            steps {
+                sh 'python3 --version'
+                sh 'python3 -m pip --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing dependencies...'
+                sh 'python3 -m pip install --user -r requirements.txt'
+            }
+        }
 
-                sh 'python -m pip install --user -r requirements.txt'
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                sh 'python3 -m compileall .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running automated tests...'
-
-                sh 'python -m pytest -v'
+                sh 'python3 -m pytest -v'
             }
         }
     }
 
     post {
-
         success {
             echo 'CI/CD Pipeline completed successfully!'
         }
