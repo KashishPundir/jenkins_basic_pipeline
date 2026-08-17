@@ -4,27 +4,28 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code from GitHub...'
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
                 echo 'Building the application...'
 
-                sh 'python3 --version'
-                sh 'python3 app.py'
+                sh 'python --version'
+                sh 'python app.py'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+
+                sh 'python -m pip install -r requirements.txt'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                echo 'Running automated tests...'
 
-                sh 'pytest'
+                sh 'python -m pytest -v'
             }
         }
     }
