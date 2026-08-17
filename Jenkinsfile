@@ -4,13 +4,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code from GitHub...'
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
                 echo 'Building the application...'
@@ -22,9 +15,9 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                echo 'Running automated tests...'
 
-                sh 'pytest'
+                sh 'python -m pytest -v'
             }
         }
     }
