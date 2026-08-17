@@ -4,49 +4,35 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code from GitHub...'
-                checkout scm
-            }
-        }
-
-        stage('Check Python') {
-            steps {
-                echo 'Checking Python installation...'
-                sh 'python3 --version'
-                sh 'python3 -m pip --version'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo 'Creating virtual environment and installing dependencies...'
-
-                sh '''
-                    python3 -m venv venv
-                    ./venv/bin/python -m pip install --upgrade pip
-                    ./venv/bin/pip install -r requirements.txt
-                '''
-            }
-        }
-
         stage('Build') {
             steps {
+                echo '========== BUILD STAGE =========='
                 echo 'Building the application...'
 
                 sh '''
-                    ./venv/bin/python -m compileall .
+                    .venv/bin/python -m compileall .
                 '''
             }
         }
 
         stage('Test') {
             steps {
+                echo '========== TEST STAGE =========='
                 echo 'Running automated tests...'
 
                 sh '''
-                    ./venv/bin/python -m pytest -v
+                    .venv/bin/python -m pytest -v
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo '========== DEPLOY STAGE =========='
+                echo 'Deploying application...'
+
+                sh '''
+                    echo "Application deployed successfully!"
                 '''
             }
         }
@@ -55,15 +41,13 @@ pipeline {
     post {
 
         success {
-            echo 'CI/CD Pipeline completed successfully!'
+            echo '================================='
+            echo 'Pipeline completed successfully!'
+            echo '================================='
         }
 
         failure {
-            echo 'CI/CD Pipeline failed!'
-        }
-
-        always {
-            echo 'Pipeline execution finished.'
+            echo 'Pipeline failed!'
         }
     }
 }
